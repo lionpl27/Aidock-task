@@ -1,0 +1,48 @@
+from unittest import TestCase
+
+
+class TestPriorty(TestCase):
+    # in setup we set 3 mails which i get name number of attached files and target date to respond
+    # set the inbox with 3 mails
+    def setUp(self):
+        self.mail1 = email("email1 priority:high", "2", "01/07/22")
+        self.mail2 = email("email2 priority:low", "4", "03/07/22")
+        self.mail3 = email("email3 priority:medium", "1", "02/07/22")
+        self.inbox = inbox(self.mail1, self.mail2, self.mail3)
+
+    # test if the mails name contains the priority
+    def test_name_contain_priority(self):
+        self.assertIn("priority:high", self.mail1.name)
+        self.assertIn("priority:low", self.mail2.name)
+        self.assertIn("priority:medium", self.mail3.name)
+
+    # test if the index really depend on the priority
+    def test_check_index_of_mail(self):
+        self.assertIs(self.mail1, self.inbox[0])
+        self.assertIs(self.mail3, self.inbox[1])
+        self.assertIs(self.mail2, self.inbox[2])
+
+    # inbox can contain up to mails add one more mail that more important than mail3
+    def test_add_new_mail_with_higher_priority(self):
+        mail4 = email("email4 priority:high", "1", "02/07/22")
+        self.inbox.add_mail(mail4)
+
+        self.assertIn(mail4, self.inbox)
+        self.assertNotIn(self.mail2, self.inbox)
+        self.assertIs(mail4, self.inbox[1])
+        self.assertIs(self.mail3, self.inbox[2])
+        self.assertEqual(3, len(self.inbox))
+
+    def test_add_new_mail_with_lower_priority(self):
+        check_inbox = inbox(self.mail1, self.mail2, self.mail3)
+        mail4 = email("email4 priority:low", "1", "04/07/22")
+        self.inbox.add_mail(mail4)
+        self.assertNotIn(mail4, self.inbox)
+        self.assertEqual(3, len(self.inbox))
+        self.assertIn(check_inbox, self.inbox)
+
+    def test_check_priority(self):
+        self.assertEqual(1, self.mail1.priority)
+        self.assertEqual(0, self.mail2.priority)
+        self.assertEqual(1, self.mail3.priority)
+        
