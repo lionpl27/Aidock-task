@@ -1,0 +1,34 @@
+from selenium import webdriver
+
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.ui import WebDriverWait
+
+from gmail_elements import  Gmailtest
+from selenium.webdriver.common.keys import Keys
+
+# Create a Chrome browser driver
+service_chrome = Service(r"G:\QA\selenium\chromedriver.exe")
+# create a Chrome browser object
+driver = webdriver.Chrome(service=service_chrome)
+# Create an explicit wait object
+wait = WebDriverWait(driver, 60)
+
+gmail_test = Gmailtest(driver)
+# go to the url
+driver.get('https://www.gmail.com')
+# in case the element was found in the page try for more 10 sec until we get an error text
+driver.implicitly_wait(10)
+# Maximize the window
+driver.maximize_window()
+
+username = gmail_test.username()
+username.send_keys('automtionwork1')
+gmail_test.next_button1().click()
+password = gmail_test.password()
+password.send_keys('Ll123456')
+password.send_keys(Keys.ENTER)
+mail_numbers = gmail_test.number_of_mails()
+last_mail_name = gmail_test.name_of_last_mail(mail_numbers)
+last_mail_subject = gmail_test.subject_of_mail(mail_numbers)
+print(f'number of mails:{mail_numbers}\nlast mail name:{last_mail_name}\nlast mail subject:{last_mail_subject}')
+driver.close()
