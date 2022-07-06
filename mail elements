@@ -1,0 +1,32 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+
+# class with all the elements of https://www.speedtest.net/
+class Gmailtest:
+    def __init__(self, driver: webdriver.Chrome):
+        self.driver = driver
+
+    def username(self):
+        return self.driver.find_element(By.CSS_SELECTOR, '[name="identifier"]')
+
+    def next_button1(self):
+        return self.driver.find_element(By.CSS_SELECTOR, '[class="VfPpkd-LgbsSe VfPpkd-LgbsSe-OWXEXe-k8QpJ VfPpkd-LgbsSe-OWXEXe-dgl2Hf nCP5yc AjY5Oe DuMIQc LQeN7 qIypjc TrZEUc lw1w4b"]')
+
+    def password(self):
+        return self.driver.find_element(By.CSS_SELECTOR, '[type="password"][class="whsOnd zHQkBf"]')
+
+    def next_button2(self):
+        return self.driver.find_element(By.ID, 'id="passwordNext"')
+
+    def gmail_logo(self):
+        return self.driver.find_element(By.CLASS_NAME, 'gb_yc')
+
+    def number_of_mails(self):
+        return self.driver.find_element(By.XPATH, '//div[@id=":4e"]/span/span[2]').text
+
+    def name_of_last_mail(self, number):
+        return self.driver.find_element(By.XPATH, f'//tr[@class="zA yO"][{number}]/td[4]/div[2]/span/span').text
+
+    def subject_of_mail(self,number):
+        return self.driver.find_element(By.XPATH, f'//tr[@class="zA yO"][{number}]/td[5]/div/div/div/span/span').text
